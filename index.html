@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Boutique Exemplo | Moda em [SUA CIDADE]</title>
+<meta name="description" content="Roupas femininas, masculinas e infantis com atendimento pelo WhatsApp. Confira a coleção da Boutique Exemplo.">
+<style>
+  :root{
+    --cor-principal:#1f1f1f;
+    --cor-destaque:#c9657a;
+    --cor-fundo:#faf7f5;
+    --cor-card:#ffffff;
+    --cor-texto:#2b2b2b;
+    --cor-suave:#7a7a7a;
+    --verde-whats:#25d366;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--cor-fundo);color:var(--cor-texto);line-height:1.5}
+  a{color:inherit;text-decoration:none}
+  .container{max-width:1080px;margin:0 auto;padding:0 20px}
+
+  /* Topo + abas */
+  header{position:sticky;top:0;z-index:10;background:rgba(250,247,245,.96);backdrop-filter:blur(6px);border-bottom:1px solid #eee}
+  .nav{display:flex;align-items:center;gap:28px;min-height:64px;flex-wrap:wrap;padding-top:8px}
+  .logo{font-weight:800;letter-spacing:.5px;font-size:1.2rem;white-space:nowrap}
+  .logo span{color:var(--cor-destaque)}
+  .abas{display:flex;gap:4px;order:3;width:100%;overflow-x:auto;scrollbar-width:none}
+  .abas::-webkit-scrollbar{display:none}
+  .aba{padding:10px 14px;font-size:.92rem;font-weight:500;color:var(--cor-suave);border-bottom:3px solid transparent;white-space:nowrap}
+  .aba:hover{color:var(--cor-texto)}
+  .aba.ativa{color:var(--cor-texto);border-bottom-color:var(--cor-destaque);font-weight:700}
+  .nav .btn{margin-left:auto}
+  @media(min-width:860px){
+    .nav{flex-wrap:nowrap;padding-top:0;height:68px}
+    .abas{order:0;width:auto}
+    .aba{padding:24px 14px 21px}
+  }
+
+  /* Botões */
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:999px;font-weight:600;font-size:.95rem;border:0;cursor:pointer;transition:transform .15s,box-shadow .15s}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.12)}
+  .btn-whats{background:var(--verde-whats);color:#fff}
+  .btn-escuro{background:var(--cor-principal);color:#fff}
+  .btn-sm{padding:9px 16px;font-size:.85rem}
+
+  /* Páginas (abas) */
+  .pagina{display:none;animation:entra .35s ease}
+  .pagina.ativa{display:block}
+  @keyframes entra{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* Hero */
+  .hero{padding:48px 0;display:grid;gap:32px;align-items:center}
+  @media(min-width:800px){.hero{grid-template-columns:1.1fr .9fr;padding:72px 0}}
+  .tag{display:inline-block;background:#f3e1e5;color:var(--cor-destaque);font-weight:600;font-size:.8rem;padding:6px 12px;border-radius:999px;margin-bottom:16px}
+  .hero h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.1;margin-bottom:16px}
+  .hero p{color:var(--cor-suave);font-size:1.05rem;margin-bottom:26px;max-width:46ch}
+  .acoes{display:flex;flex-wrap:wrap;gap:12px}
+  .hero-arte{aspect-ratio:4/5;border-radius:24px;background:linear-gradient(160deg,#f3d6dc,#e3a5b3 60%,#c9657a);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .hero-arte svg{width:62%;opacity:.95;filter:drop-shadow(0 12px 18px rgba(0,0,0,.18))}
+  .hero-arte img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+  /* Seções */
+  section{padding:40px 0}
+  h2{font-size:1.7rem;margin-bottom:8px}
+  .sub{color:var(--cor-suave);margin-bottom:28px}
+  .titulo-pagina{padding:44px 0 0}
+
+  /* Filtros */
+  .filtros{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+  .filtro{padding:9px 18px;border-radius:999px;border:1px solid #ddd;background:#fff;cursor:pointer;font-size:.9rem;font-weight:500}
+  .filtro.ativo{background:var(--cor-principal);color:#fff;border-color:var(--cor-principal)}
+
+  /* Produtos */
+  .grade{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  @media(min-width:800px){.grade{grid-template-columns:repeat(4,1fr);gap:22px}}
+  .card{background:var(--cor-card);border-radius:18px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.05);display:flex;flex-direction:column}
+  .foto{aspect-ratio:3/4;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .foto svg{width:58%;filter:drop-shadow(0 8px 10px rgba(0,0,0,.15))}
+  .foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .selo{position:absolute;top:10px;left:10px;background:var(--cor-destaque);color:#fff;font-size:.7rem;font-weight:700;padding:4px 10px;border-radius:999px;z-index:1}
+  .card .info{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .card h3{font-size:.98rem}
+  .card .tam{font-size:.78rem;color:var(--cor-suave)}
+  .card .preco{font-weight:700;font-size:1.05rem;margin-top:auto}
+  .card .preco small{font-weight:400;color:var(--cor-suave);font-size:.75rem}
+
+  /* Blocos de texto */
+  .difs{display:grid;gap:16px}
+  @media(min-width:700px){.difs{grid-template-columns:repeat(3,1fr)}}
+  .dif{background:#fff;border-radius:18px;padding:22px}
+  .dif .ico{font-size:1.6rem;margin-bottom:8px}
+  .dif p{color:var(--cor-suave);font-size:.92rem}
+
+  .sobre{display:grid;gap:28px;align-items:center}
+  @media(min-width:800px){.sobre{grid-template-columns:1fr 1fr}}
+  .sobre p{color:var(--cor-suave);margin-bottom:14px}
+  .sobre-arte{aspect-ratio:1;border-radius:24px;background:linear-gradient(135deg,#e9d9cf,#d9b8a6);display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative;overflow:hidden}
+  .sobre-arte img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .numeros{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+  .num{background:#fff;border-radius:16px;padding:16px;text-align:center}
+  .num b{display:block;font-size:1.5rem;color:var(--cor-destaque)}
+  .num span{font-size:.8rem;color:var(--cor-suave)}
+
+  .depos{display:grid;gap:16px}
+  @media(min-width:800px){.depos{grid-template-columns:repeat(3,1fr)}}
+  .depo{background:#fff;border-radius:18px;padding:22px}
+  .depo .estrelas{color:#f5b301;margin-bottom:8px;letter-spacing:2px}
+  .depo p{font-size:.95rem;margin-bottom:12px}
+  .depo b{font-size:.85rem;color:var(--cor-suave);font-weight:600}
+
+  .contato{display:grid;gap:24px}
+  @media(min-width:800px){.contato{grid-template-columns:1fr 1.2fr}}
+  .caixa{background:#fff;border-radius:18px;padding:24px}
+  .caixa li{list-style:none;margin-bottom:12px}
+  .caixa strong{display:block;font-size:.8rem;text-transform:uppercase;letter-spacing:.5px;color:var(--cor-suave)}
+  iframe{width:100%;height:100%;min-height:300px;border:0;border-radius:18px}
+
+  .faixa{background:var(--cor-principal);color:#fff;border-radius:24px;padding:32px 26px;text-align:center;margin:12px 0 40px}
+  .faixa p{color:#cfcfcf;margin:8px 0 18px}
+
+  footer{padding:28px 0;text-align:center;color:var(--cor-suave);font-size:.85rem;border-top:1px solid #eee;margin-top:20px}
+  .whats-fixo{position:fixed;right:18px;bottom:18px;z-index:20;background:var(--verde-whats);color:#fff;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.7rem;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container nav">
+    <a href="#inicio" class="logo">BOUTIQUE<span>.</span>EXEMPLO</a>
+    <nav class="abas" id="abas">
+      <a class="aba" href="#inicio">Início</a>
+      <a class="aba" href="#colecao">Coleção</a>
+      <a class="aba" href="#sobre">Sobre nós</a>
+      <a class="aba" href="#clientes">Clientes</a>
+      <a class="aba" href="#contato">Contato</a>
+    </nav>
+    <a class="btn btn-whats btn-sm" data-whats="Olá! Vim pelo site e gostaria de mais informações." href="#">WhatsApp</a>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- ABA: INÍCIO -->
+  <div class="pagina" id="inicio">
+    <div class="hero">
+      <div>
+        <span class="tag">Nova coleção chegou</span>
+        <h1>Estilo e conforto para o seu dia a dia.</h1>
+        <p>Peças selecionadas, atendimento próximo e entrega rápida em [SUA CIDADE]. Escolha pelo site e finalize pelo WhatsApp.</p>
+        <div class="acoes">
+          <a class="btn btn-whats" data-whats="Olá! Quero ver as novidades da loja." href="#">Chamar no WhatsApp</a>
+          <a class="btn btn-escuro" href="#colecao">Ver coleção</a>
+        </div>
+      </div>
+      <!-- Para foto real: coloque o arquivo na pasta fotos/ e use FOTO_HERO lá no script -->
+      <div class="hero-arte" id="hero-arte"></div>
+    </div>
+
+    <section>
+      <h2>Destaques da semana</h2>
+      <p class="sub">As peças que mais saem na loja.</p>
+      <div class="grade" id="grade-destaques"></div>
+      <div class="acoes" style="margin-top:24px"><a class="btn btn-escuro" href="#colecao">Ver coleção completa</a></div>
+    </section>
+
+    <section>
+      <h2>Por que comprar com a gente</h2>
+      <p class="sub">Atendimento de bairro, com a praticidade de loja online.</p>
+      <div class="difs">
+        <div class="dif"><div class="ico">💬</div><h3>Atendimento no WhatsApp</h3><p>Tire dúvidas, peça fotos extras e reserve sua peça sem sair de casa.</p></div>
+        <div class="dif"><div class="ico">🛵</div><h3>Entrega na região</h3><p>Receba em casa ou retire na loja, como preferir.</p></div>
+        <div class="dif"><div class="ico">🔄</div><h3>Troca facilitada</h3><p>Não serviu? Trocamos de forma simples dentro do prazo combinado.</p></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ABA: COLEÇÃO -->
+  <div class="pagina" id="colecao">
+    <div class="titulo-pagina">
+      <h2>Nossa coleção</h2>
+      <p class="sub">Toque em “Pedir” para falar direto com a loja sobre a peça.</p>
+    </div>
+    <div class="filtros" id="filtros"></div>
+    <div class="grade" id="grade"></div>
+    <div class="faixa" style="margin-top:40px">
+      <h3>Não achou o que procurava?</h3>
+      <p>Chama a gente no WhatsApp. Muita peça nova chega antes de ir pro site.</p>
+      <a class="btn btn-whats" data-whats="Olá! Não encontrei no site o que procuro. Podem me ajudar?" href="#">Pedir ajuda</a>
+    </div>
+  </div>
+
+  <!-- ABA: SOBRE NÓS -->
+  <div class="pagina" id="sobre">
+    <section class="titulo-pagina">
+      <div class="sobre">
+        <div>
+          <span class="tag">Nossa história</span>
+          <h2>Moda de bairro, com carinho de casa</h2>
+          <p>A Boutique Exemplo nasceu com a ideia de vestir bem sem complicar. Escolhemos cada peça pensando em conforto, qualidade e preço justo.</p>
+          <p>Aqui você é atendido pelo nome, encontra tamanhos variados e sai com a roupa ajustada ao seu estilo. [SUBSTITUA POR UM TEXTO REAL DA LOJA]</p>
+          <div class="numeros">
+            <div class="num"><b>+5</b><span>anos de loja</span></div>
+            <div class="num"><b>+2 mil</b><span>clientes atendidos</span></div>
+            <div class="num"><b>4,9</b><span>nota média</span></div>
+          </div>
+        </div>
+        <div class="sobre-arte" id="sobre-arte">🛍️</div>
+      </div>
+    </section>
+    <section>
+      <h2>Nossos valores</h2>
+      <p class="sub">O que guia o nosso atendimento.</p>
+      <div class="difs">
+        <div class="dif"><div class="ico">🤝</div><h3>Proximidade</h3><p>Conhecemos nossos clientes e ajudamos a escolher sem pressão.</p></div>
+        <div class="dif"><div class="ico">✨</div><h3>Qualidade</h3><p>Peças selecionadas, com acabamento e tecidos que duram.</p></div>
+        <div class="dif"><div class="ico">💸</div><h3>Preço justo</h3><p>Boas marcas e bons preços, com pagamento facilitado.</p></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ABA: CLIENTES -->
+  <div class="pagina" id="clientes">
+    <div class="titulo-pagina">
+      <h2>Quem compra, recomenda</h2>
+      <p class="sub">Depoimentos de exemplo. Troque pelos reais do lojista.</p>
+    </div>
+    <div class="depos">
+      <div class="depo"><div class="estrelas">★★★★★</div><p>“Atendimento excelente, mandaram as fotos pelo WhatsApp e já separaram meu tamanho. Super prático!”</p><b>Mariana S.</b></div>
+      <div class="depo"><div class="estrelas">★★★★★</div><p>“Roupas de ótima qualidade e preço bom. Já indiquei pra toda a família.”</p><b>Carlos R.</b></div>
+      <div class="depo"><div class="estrelas">★★★★★</div><p>“Troquei uma peça sem nenhuma burocracia. Voltarei sempre.”</p><b>Fernanda L.</b></div>
+    </div>
+    <div class="faixa" style="margin-top:40px">
+      <h3>Venha conhecer a loja</h3>
+      <p>Atendimento pessoal e as novidades da semana te esperando.</p>
+      <a class="btn btn-whats" data-whats="Olá! Vi o site e quero conhecer a loja." href="#">Falar com a loja</a>
+    </div>
+  </div>
+
+  <!-- ABA: CONTATO -->
+  <div class="pagina" id="contato">
+    <section class="titulo-pagina">
+      <h2>Venha nos visitar</h2>
+      <p class="sub">Estamos pertinho de você.</p>
+      <div class="contato">
+        <div class="caixa">
+          <ul>
+            <li><strong>Endereço</strong>Rua Exemplo, 123 - Bairro, [SUA CIDADE]</li>
+            <li><strong>Horário</strong>Seg a Sex: 9h às 18h<br>Sábado: 9h às 14h</li>
+            <li><strong>WhatsApp</strong><span id="numero-exibido"></span></li>
+            <li><strong>Instagram</strong>@boutiqueexemplo</li>
+          </ul>
+          <a class="btn btn-whats" data-whats="Olá! Gostaria de saber o horário e como chegar na loja." href="#">Falar com a loja</a>
+        </div>
+        <!-- Mapa real: Google Maps > pesquise o endereço > Compartilhar > Incorporar um mapa > copie o src -->
+        <iframe loading="lazy" title="Mapa da loja" src="https://www.google.com/maps?q=Rua+Exemplo+123&output=embed"></iframe>
+      </div>
+    </section>
+  </div>
+
+</main>
+
+<footer>
+  <div class="container">© <span id="ano"></span> Boutique Exemplo. Todos os direitos reservados.</div>
+</footer>
+
+<a class="whats-fixo" data-whats="Olá! Vim pelo site e gostaria de atendimento." href="#" aria-label="Falar no WhatsApp">💬</a>
+
+<script>
+  /* ================= EDITE AQUI ================= */
+  const WHATSAPP = "5500000000000";        // 55 + DDD + número, só dígitos
+  const WHATSAPP_EXIBIDO = "(00) 00000-0000";
+
+  /* Fotos reais (opcional): coloque os arquivos numa pasta "fotos" junto do index.html
+     e preencha o caminho. Se ficar vazio ou o arquivo não existir, aparece a ilustração. */
+  const FOTO_HERO  = "";   // ex: "fotos/hero.jpg"
+  const FOTO_SOBRE = "";   // ex: "fotos/loja.jpg"
+
+  // tipo: vestido | camiseta | calca | bermuda | jaqueta   |   destaque: true aparece na aba Início
+  const PRODUTOS = [
+    { nome:"Vestido Floral Midi",  cat:"Feminino",  preco:129.90, tam:"P ao GG",  tipo:"vestido",  fundo:"#f6dfe4", tom:"#c9657a", foto:"", destaque:true,  selo:"Novo" },
+    { nome:"Blusa Básica Algodão", cat:"Feminino",  preco:49.90,  tam:"P ao GG",  tipo:"camiseta", fundo:"#ebe4f5", tom:"#8b72bd", foto:"", destaque:true },
+    { nome:"Calça Jeans Skinny",   cat:"Feminino",  preco:149.90, tam:"36 ao 46", tipo:"calca",    fundo:"#dde8f5", tom:"#3f6aa6", foto:"", destaque:false },
+    { nome:"Vestido Longo Liso",   cat:"Feminino",  preco:159.90, tam:"P ao GG",  tipo:"vestido",  fundo:"#e3efe5", tom:"#4f8a63", foto:"", destaque:false },
+    { nome:"Camiseta Oversized",   cat:"Masculino", preco:69.90,  tam:"P ao GG",  tipo:"camiseta", fundo:"#e5ece5", tom:"#2f3d35", foto:"", destaque:true },
+    { nome:"Calça Jeans Reta",     cat:"Masculino", preco:169.90, tam:"38 ao 48", tipo:"calca",    fundo:"#dfe4ec", tom:"#34495e", foto:"", destaque:false },
+    { nome:"Bermuda Sarja",        cat:"Masculino", preco:99.90,  tam:"38 ao 48", tipo:"bermuda",  fundo:"#f3ead6", tom:"#b08a3e", foto:"", destaque:false },
+    { nome:"Jaqueta Jeans",        cat:"Masculino", preco:189.90, tam:"M ao GG",  tipo:"jaqueta",  fundo:"#d9e0ea", tom:"#3a5273", foto:"", destaque:true,  selo:"Mais vendido" },
+    { nome:"Camiseta Estampada",   cat:"Masculino", preco:59.90,  tam:"P ao GG",  tipo:"camiseta", fundo:"#f5e3d6", tom:"#d2733a", foto:"", destaque:false },
+    { nome:"Conjunto Infantil",    cat:"Infantil",  preco:79.90,  tam:"2 ao 10",  tipo:"camiseta", fundo:"#f6e8c9", tom:"#e0a526", foto:"", destaque:false },
+    { nome:"Vestido Infantil",     cat:"Infantil",  preco:89.90,  tam:"2 ao 10",  tipo:"vestido",  fundo:"#f6dce9", tom:"#d9739f", foto:"", destaque:false },
+    { nome:"Bermuda Infantil",     cat:"Infantil",  preco:49.90,  tam:"2 ao 10",  tipo:"bermuda",  fundo:"#d9ecf3", tom:"#3b91b0", foto:"", destaque:false }
+  ];
+  /* ============================================== */
+
+  // Ilustrações das peças (SVG). Servem de "foto" enquanto não houver imagem real.
+  const FORMAS = {
+    camiseta:'<path d="M30 20 L42 14 Q50 26 58 14 L70 20 L90 40 L78 52 L70 44 L70 104 L30 104 L30 44 L22 52 L10 40 Z"/>',
+    vestido:'<path d="M38 12 L44 12 Q50 24 56 12 L62 12 L67 46 L60 52 L78 110 L22 110 L40 52 L33 46 Z"/>',
+    calca:'<path d="M30 12 L70 12 L76 110 L56 110 L50 48 L44 110 L24 110 Z"/><path d="M30 22 H70" stroke="rgba(255,255,255,.55)" stroke-width="2" fill="none"/>',
+    bermuda:'<path d="M26 26 L74 26 L80 84 L56 84 L50 52 L44 84 L20 84 Z"/><path d="M26 34 H74" stroke="rgba(255,255,255,.55)" stroke-width="2" fill="none"/>',
+    jaqueta:'<path d="M32 14 L44 10 L50 20 L56 10 L68 14 L92 84 L80 88 L70 52 L70 108 L30 108 L30 52 L20 88 L8 84 Z"/><path d="M50 20 V108" stroke="rgba(255,255,255,.6)" stroke-width="2" fill="none"/><rect x="35" y="70" width="11" height="10" rx="2" fill="rgba(255,255,255,.35)"/><rect x="54" y="70" width="11" height="10" rx="2" fill="rgba(255,255,255,.35)"/>'
+  };
+  const svg = (tipo, cor) =>
+    `<svg viewBox="0 0 100 120" fill="${cor}" stroke="${cor}" stroke-width="1" stroke-linejoin="round" aria-hidden="true">${FORMAS[tipo]}</svg>`;
+
+  const reais = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+  const linkZap = msg => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
+
+  function cartao(p){
+    const img = p.foto ? `<img src="${p.foto}" alt="${p.nome}" loading="lazy" onerror="this.remove()">` : "";
+    const selo = p.selo ? `<span class="selo">${p.selo}</span>` : "";
+    return `
+      <article class="card">
+        <div class="foto" style="background:${p.fundo}">${selo}${svg(p.tipo,p.tom)}${img}</div>
+        <div class="info">
+          <h3>${p.nome}</h3>
+          <span class="tam">Tamanhos: ${p.tam}</span>
+          <span class="preco">${reais(p.preco)} <small>no Pix ou cartão</small></span>
+          <a class="btn btn-whats btn-sm" target="_blank" rel="noopener"
+             href="${linkZap(`Olá! Tenho interesse na peça: ${p.nome} (${reais(p.preco)}). Ainda tem disponível?`)}">Pedir</a>
+        </div>
+      </article>`;
+  }
+
+  // Coleção com filtro
+  const grade = document.getElementById("grade");
+  const filtros = document.getElementById("filtros");
+  function desenhar(cat){
+    const lista = cat === "Todos" ? PRODUTOS : PRODUTOS.filter(p => p.cat === cat);
+    grade.innerHTML = lista.map(cartao).join("");
+  }
+  const categorias = ["Todos", ...new Set(PRODUTOS.map(p => p.cat))];
+  filtros.innerHTML = categorias.map((c,i) => `<button class="filtro ${i===0?"ativo":""}" data-cat="${c}">${c}</button>`).join("");
+  filtros.addEventListener("click", e => {
+    const b = e.target.closest(".filtro"); if(!b) return;
+    filtros.querySelectorAll(".filtro").forEach(x => x.classList.remove("ativo"));
+    b.classList.add("ativo");
+    desenhar(b.dataset.cat);
+  });
+  desenhar("Todos");
+
+  // Destaques na aba Início
+  document.getElementById("grade-destaques").innerHTML = PRODUTOS.filter(p => p.destaque).slice(0,4).map(cartao).join("");
+
+  // Imagens de capa
+  document.getElementById("hero-arte").innerHTML = svg("vestido","#ffffff") + (FOTO_HERO ? `<img src="${FOTO_HERO}" alt="Coleção" onerror="this.remove()">` : "");
+  if (FOTO_SOBRE) document.getElementById("sobre-arte").insertAdjacentHTML("beforeend", `<img src="${FOTO_SOBRE}" alt="Nossa loja" onerror="this.remove()">`);
+
+  // Abas
+  const paginas = [...document.querySelectorAll(".pagina")];
+  const abas = [...document.querySelectorAll(".aba")];
+  function mostrar(){
+    let id = location.hash.replace("#","");
+    if (!paginas.some(p => p.id === id)) id = "inicio";
+    paginas.forEach(p => p.classList.toggle("ativa", p.id === id));
+    abas.forEach(a => a.classList.toggle("ativa", a.getAttribute("href") === "#" + id));
+    window.scrollTo({top:0});
+    const ativa = abas.find(a => a.classList.contains("ativa"));
+    if (ativa) ativa.scrollIntoView({inline:"center",block:"nearest"});
+  }
+  window.addEventListener("hashchange", mostrar);
+  mostrar();
+
+  // WhatsApp, número e rodapé
+  document.querySelectorAll("[data-whats]").forEach(a => {
+    a.href = linkZap(a.dataset.whats);
+    a.target = "_blank"; a.rel = "noopener";
+  });
+  document.getElementById("numero-exibido").textContent = WHATSAPP_EXIBIDO;
+  document.getElementById("ano").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
